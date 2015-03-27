@@ -1,3 +1,7 @@
+This is a fork of Johann C. Rocholl's fork of Marlin. The latest commits on Johann's repository (dated December 2014) would not compile if the RepRap Discount 2004 LCD Controller (20 characters, 4 lines, text only) was enabled in Configuration.h. I finally found a small patch (from a pull request in the Marlin repository) that allowed me to properly compile  the code with the desired configuration: see https://github.com/MarlinFirmware/Marlin/pull/1228
+
+There are no other changes compared to Johann's repository.
+
 Developer Notes
 ===================
 
