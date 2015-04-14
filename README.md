@@ -2,7 +2,10 @@ This is a fork of Johann C. Rocholl's fork of Marlin. The latest commits on Joha
 
 Note: I am using the Arduino IDE version 1.0.5+dfsg2-2 in Ubuntu 14.04 to compile the firmware.
 
-There are no other changes compared to Johann's repository (apart from this README.md file and the patch).
+There are no other changes compared to Johann's repository (apart from this README.md file and the patch) in the deltabot branch.
+
+Update 14-05-2015
+I have created a delta_auto_calibration branch where I will include code from Rich Cattell's fork of Marlin for auto-calibration as well as code from David Crocker that implements a fast 7-factor least-squares fit algorithm.
 
 Developer Notes
 ===================
