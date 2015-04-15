@@ -7,7 +7,7 @@ There are no other changes compared to Johann's repository (apart from this READ
 Update 14-05-2015
 =================
 
-I have created a delta_auto_calibration branch where I will include code from Rich Cattell's fork of Marlin for auto-calibration as well as code from David Crocker that implements a fast 7-factor least-squares fit algorithm.
+I have created a new delta_auto_calibration branch where I will include code from Rich Cattell's fork of Marlin for auto-calibration as well as code from David Crocker that implements a fast 7-factor least-squares fit algorithm.
 
 Developer Notes
 ===================
