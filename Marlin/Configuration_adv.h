@@ -231,7 +231,11 @@
 #define INVERT_E_STEP_PIN false
 
 //default stepper release if idle
-#define DEFAULT_STEPPER_DEACTIVE_TIME 60
+#ifdef DELTA
+  #define DEFAULT_STEPPER_DEACTIVE_TIME 0 // PJR - Never auto-disable steppers for a Delta since positions will be lost - unless deliberately sent by controller
+#else
+  #define DEFAULT_STEPPER_DEACTIVE_TIME 60
+#endif
 
 #define DEFAULT_MINIMUMFEEDRATE       0.0     // minimum feedrate
 #define DEFAULT_MINTRAVELFEEDRATE     0.0

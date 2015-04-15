@@ -1135,16 +1135,32 @@ static void engage_z_probe() {
         servos[servo_endstops[Z_AXIS]].detach();
 #endif
     }
-    #else // Deploy the Z probe by touching the belt, no servo needed.
-    feedrate = homing_feedrate[X_AXIS];
-    destination[X_AXIS] = 35;
-    destination[Y_AXIS] = 72;
-    destination[Z_AXIS] = 100;
-    prepare_move_raw();
+    #else // Deploy the Z probe, most likely by touching one of the arms, no servo needed.
 
-    feedrate = homing_feedrate[X_AXIS]/10;
-    destination[X_AXIS] = 0;
-    prepare_move_raw();
+    #if defined(TOUCH_PROBE_DEPLOY_1_X) && defined(TOUCH_PROBE_DEPLOY_1_Y) && defined(TOUCH_PROBE_DEPLOY_1_Z)
+      destination[X_AXIS] = TOUCH_PROBE_DEPLOY_1_X;
+      destination[Y_AXIS] = TOUCH_PROBE_DEPLOY_1_Y;
+      destination[Z_AXIS] = TOUCH_PROBE_DEPLOY_1_Z;
+      feedrate = TOUCH_PROBE_DEPLOY_1_FEEDRATE;
+      prepare_move_raw();
+    #endif
+
+    #if defined(TOUCH_PROBE_DEPLOY_2_X) && defined(TOUCH_PROBE_DEPLOY_2_Y) && defined(TOUCH_PROBE_DEPLOY_2_Z)
+      destination[X_AXIS] = TOUCH_PROBE_DEPLOY_2_X;
+      destination[Y_AXIS] = TOUCH_PROBE_DEPLOY_2_Y;
+      destination[Z_AXIS] = TOUCH_PROBE_DEPLOY_2_Z;
+      feedrate = TOUCH_PROBE_DEPLOY_2_FEEDRATE;
+      prepare_move_raw();
+    #endif
+
+    #if defined(TOUCH_PROBE_DEPLOY_3_X) && defined(TOUCH_PROBE_DEPLOY_3_Y) && defined(TOUCH_PROBE_DEPLOY_3_Z)
+      destination[X_AXIS] = TOUCH_PROBE_DEPLOY_3_X;
+      destination[Y_AXIS] = TOUCH_PROBE_DEPLOY_3_Y;
+      destination[Z_AXIS] = TOUCH_PROBE_DEPLOY_3_Z;
+      feedrate = TOUCH_PROBE_DEPLOY_3_FEEDRATE;
+      prepare_move_raw();
+    #endif
+
     st_synchronize();
     #endif //SERVO_ENDSTOPS
 }
@@ -1163,28 +1179,37 @@ static void retract_z_probe() {
 #endif
     }
     #else // Push up the Z probe by moving the end effector, no servo needed.
+
+    // Put the end effector high enough up that it won't crash the head when moving to TOUCH_PROBE_RETRACT_1_*
+    // @todo: check that we're not already too high before moving up
     feedrate = homing_feedrate[X_AXIS];
-    destination[Z_AXIS] = current_position[Z_AXIS] + 20;
+    destination[Z_AXIS] = current_position[Z_AXIS] + 100;
     prepare_move_raw();
 
-    destination[X_AXIS] = -46;
-    destination[Y_AXIS] = 59;
-    destination[Z_AXIS] = 28;
-    prepare_move_raw();
+    #if defined(TOUCH_PROBE_RETRACT_1_X) && defined(TOUCH_PROBE_RETRACT_1_Y) && defined(TOUCH_PROBE_RETRACT_1_Z)
+      destination[X_AXIS] = TOUCH_PROBE_RETRACT_1_X;
+      destination[Y_AXIS] = TOUCH_PROBE_RETRACT_1_Y;
+      destination[Z_AXIS] = TOUCH_PROBE_RETRACT_1_Z;
+      feedrate = TOUCH_PROBE_RETRACT_1_FEEDRATE;
+      prepare_move_raw();
+    #endif
 
-    // TODO: Move the nozzle down until the Z probe switch is activated.
-    //enable_endstops(true);
-    //destination[Z_AXIS] = current_position[Z_AXIS] - 30;
-    //enable_endstops(false);
+    #if defined(TOUCH_PROBE_RETRACT_2_X) && defined(TOUCH_PROBE_RETRACT_2_Y) && defined(TOUCH_PROBE_RETRACT_2_Z)
+      destination[X_AXIS] = TOUCH_PROBE_RETRACT_2_X;
+      destination[Y_AXIS] = TOUCH_PROBE_RETRACT_2_Y;
+      destination[Z_AXIS] = TOUCH_PROBE_RETRACT_2_Z;
+      feedrate = TOUCH_PROBE_RETRACT_2_FEEDRATE;
+      prepare_move_raw();
+    #endif
 
-    // Move the nozzle down further to push the probe into retracted position.
-    feedrate = homing_feedrate[Z_AXIS]/10;
-    destination[Z_AXIS] = current_position[Z_AXIS] - 20;
-    prepare_move_raw();
+    #if defined(TOUCH_PROBE_RETRACT_3_X) && defined(TOUCH_PROBE_RETRACT_3_Y) && defined(TOUCH_PROBE_RETRACT_3_Z)
+      destination[X_AXIS] = TOUCH_PROBE_RETRACT_3_X;
+      destination[Y_AXIS] = TOUCH_PROBE_RETRACT_3_Y;
+      destination[Z_AXIS] = TOUCH_PROBE_RETRACT_3_Z;
+      feedrate = TOUCH_PROBE_RETRACT_3_FEEDRATE;
+      prepare_move_raw();
+    #endif
 
-    feedrate = homing_feedrate[Z_AXIS];
-    destination[Z_AXIS] = current_position[Z_AXIS] + 30;
-    prepare_move_raw();
     st_synchronize();
     #endif //SERVO_ENDSTOPS
 }
@@ -1331,10 +1356,12 @@ static void homeaxis(int axis) {
 #ifdef DELTA
     // retrace by the amount specified in endstop_adj
     if (endstop_adj[axis] * axis_home_dir < 0) {
+      enable_endstops(false);  // Ignore Z probe while moving away from the top microswitch.
       plan_set_position(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS]);
       destination[axis] = endstop_adj[axis];
       plan_buffer_line(destination[X_AXIS], destination[Y_AXIS], destination[Z_AXIS], destination[E_AXIS], feedrate/60, active_extruder);
       st_synchronize();
+      enable_endstops(true);  // Stop ignoring Z probe while moving up to the top microswitch again.
     }
 #endif
     axis_is_at_home(axis);
@@ -1792,7 +1819,7 @@ void process_commands()
 
           #ifdef NONLINEAR_BED_LEVELING
             reset_bed_level();
-          #else //NONLINEAR_BED_LEVELING
+          #else //not defined NONLINEAR_BED_LEVELING
             vector_3 uncorrected_position = plan_get_position();
             //uncorrected_position.debug("position durring G29");
             current_position[X_AXIS] = uncorrected_position.x;
@@ -1803,7 +1830,7 @@ void process_commands()
 
           #ifndef SERVO_ENDSTOPS
             engage_z_probe();   // Engage Z probe by moving the end effector.
-          #endif
+          #endif //SERVO_ENDSTOPS
 
             setup_for_endstop_move();
 
@@ -1865,6 +1892,7 @@ void process_commands()
                 float measured_z = probe_pt(xProbe, yProbe, z_before);
 
                 #ifdef NONLINEAR_BED_LEVELING
+                // @todo: take x and y offset into account
                 bed_level[xCount][yCount] = measured_z + z_offset;
                 #endif //NONLINEAR_BED_LEVELING
 
@@ -1885,7 +1913,7 @@ void process_commands()
           #ifdef NONLINEAR_BED_LEVELING
             extrapolate_unprobed_bed_level();
             print_bed_level();
-          #else //NONLINEAR_BED_LEVELING
+          #else //NONLINEAR_BED_LEVELING not defined
             // solve lsq problem
             double *plane_equation_coefficients = qr_solve(AUTO_BED_LEVELING_GRID_POINTS*AUTO_BED_LEVELING_GRID_POINTS, 3, eqnAMatrix, eqnBVector);
 
