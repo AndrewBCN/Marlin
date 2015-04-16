@@ -3040,7 +3040,7 @@ void process_commands()
           #ifdef NONLINEAR_BED_LEVELING
             extrapolate_unprobed_bed_level();
             print_bed_level();
-          #else //NONLINEAR_BED_LEVELING
+          #else //NONLINEAR_BED_LEVELING not defined
             // solve lsq problem
             double *plane_equation_coefficients = qr_solve(AUTO_BED_LEVELING_GRID_POINTS*AUTO_BED_LEVELING_GRID_POINTS, 3, eqnAMatrix, eqnBVector);
 

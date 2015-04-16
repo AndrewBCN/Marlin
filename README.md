@@ -1,3 +1,14 @@
+This is a fork of Johann C. Rocholl's fork of Marlin. The latest commits on Johann's repository (dated December 2014) would not compile if the RepRap Discount 2004 LCD Controller (20 characters, 4 lines, text only) was enabled in Configuration.h. I finally found a small patch (from a pull request in the Marlin repository) that allowed me to properly compile  the code with the desired configuration: see https://github.com/MarlinFirmware/Marlin/pull/1228
+
+Note: I am using the Arduino IDE version 1.0.5+dfsg2-2 in Ubuntu 14.04 to compile the firmware.
+
+There are no other changes compared to Johann's repository (apart from this README.md file and the patch) in the deltabot branch.
+
+Update 14-05-2015
+=================
+
+I have created a new delta_auto_calibration branch where I will include code from Rich Cattell's fork of Marlin for auto-calibration as well as code from David Crocker that implements a fast 7-factor least-squares fit algorithm.
+
 Developer Notes
 ===================
 
