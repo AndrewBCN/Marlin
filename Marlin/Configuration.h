@@ -25,7 +25,7 @@
 // startup. Implementation of an idea by Prof Braino to inform user that any changes made to this
 // build by the user have been successfully uploaded into firmware.
 #define STRING_VERSION_CONFIG_H __DATE__ " " __TIME__ // build date and time
-#define STRING_CONFIG_H_AUTHOR "(ex-nerd/RichCattell/PJR, Kossel Pro)" // Who made the changes.
+#define STRING_CONFIG_H_AUTHOR "(AndrewBCN, Delta Steel)" // Who made the changes.
 
 // SERIAL_PORT selects which serial port should be used for communication with the host.
 // This allows the connection of wireless adapters (for instance) to non-default port pins.
@@ -42,11 +42,11 @@
 // The following define selects which electronics board you have.
 // Please choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_BRAINWAVE_PRO
+  #define MOTHERBOARD BOARD_RAMPS_13_EFB
 #endif
 
 // Define this to set a custom name for your generic Mendel,
-#define CUSTOM_MENDEL_NAME "OB Kossel Pro HBP"
+#define CUSTOM_MENDEL_NAME "Delta Steel"
 
 // Define this to set a unique identifier for this printer, (Used by some programs to differentiate between machines)
 // You can use an online service to generate a random UUID. (eg http://www.uuidgenerator.net/version4)
@@ -523,6 +523,7 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
     #define TOUCH_PROBE_RETRACT_2_X 36.00 // move down to retract probe
     #define TOUCH_PROBE_RETRACT_2_Y -122.00
     #define TOUCH_PROBE_RETRACT_2_Z 8.0 //25.0 //**PJR - Needs to change since MANUAL_Z_HOME_POS is now actual bed distance
+    #define TOUCH_PROBE_RETRACT_2_FEEDRATE (HOMING_FEEDRATE_Z/10)
     #define TOUCH_PROBE_RETRACT_3_X 0.0  // return to 0,0,100
     #define TOUCH_PROBE_RETRACT_3_Y 0.0
     #define TOUCH_PROBE_RETRACT_3_Z 100.0
@@ -580,11 +581,11 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
   //#define PROBE_SERVO_DEACTIVATION_DELAY 300
 
 
-  // PJR - This is not applicable for deltabots and can actually actually cause problems if enabled.
-  #ifndef DELTA
+    // PJR - This is not applicable for deltabots and can actually actually cause problems if enabled.
+  
     //If you have enabled the Bed Auto Leveling and are using the same Z Probe for Z Homing,
     //it is highly recommended you let this Z_SAFE_HOMING enabled!!!
-  //**PJR - This is not applicable for deltabots
+    
   #ifndef DELTA
     #define Z_SAFE_HOMING   // This feature is meant to avoid Z homing with probe outside the bed area.
                             // When defined, it will:
@@ -666,7 +667,7 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
 //LCD and SD support
 //#define ULTRA_LCD  //general LCD support, also 16x2
 //#define DOGLCD  // Support for SPI LCD 128x64 (Controller ST7565R graphic Display Family)
-#define SDSUPPORT // Enable SD Card Support in Hardware Console
+//#define SDSUPPORT // Enable SD Card Support in Hardware Console
 //#define SDSLOW // Use slower SD transfer mode (not normally needed - uncomment if you're getting volume init error)
 //#define SD_CHECK_AND_RETRY // Use CRC checks and retries on the SD communication
 //#define ENCODER_PULSES_PER_STEP 1 // Increase if you have a high resolution encoder
@@ -682,7 +683,7 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
 
 // The RepRapDiscount Smart Controller (white PCB)
 // http://reprap.org/wiki/RepRapDiscount_Smart_Controller
-//#define REPRAP_DISCOUNT_SMART_CONTROLLER
+#define REPRAP_DISCOUNT_SMART_CONTROLLER
 
 // The GADGETS3D G3D LCD/SD Controller (blue PCB)
 // http://reprap.org/wiki/RAMPS_1.3/1.4_GADGETS3D_Shield_with_Panel
