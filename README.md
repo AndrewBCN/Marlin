@@ -4,21 +4,15 @@ Note: I am using the Arduino IDE version 1.0.5+dfsg2-2 in Ubuntu 14.04 to compil
 
 There are no other changes compared to Johann's repository (apart from this README.md file and the patch) in the deltabot branch.
 
-Update 14-05-2015
+Update 14-04-2015
 =================
 
-I have created a new delta_auto_calibration branch where I will include code from Rich Cattell's fork of Marlin for auto-calibration as well as code from David Crocker that implements a fast 7-factor least-squares fit algorithm.
+I have created a new delta_auto_calibration branch where I have merged code from Rich Cattell's fork of Marlin for auto-calibration.
 
-Developer Notes
-===================
+Update 20-04-2015
+=================
 
-- There are now 3 branches: The __development__ branch is where new features and code changes will be sorted out. This branch may have untested code in it, so please let us know if you find any bugs. When the __development__ branch has reached a state where it is stable, it will be moved to the __stable__ branch and in the end it will land in the __main__ branch.
-
-- We are doing a kind of cleanup in the list of Issues and Pull Requests, the aim is to get to a state where we can certify the code as stable. To get the code tested as widely as possible we require several volunteers with a wide variety of hardware configurations willing to test the firmware and help us to certify it as stable. If you want to help out testing go to this issue and let us know: https://github.com/ErikZalm/Marlin/issues/1209
-
-- Before you submit any pull request, we ask that you _PLEASE_ test your code before submission, even if the change seems innocuous. When creating the pull request, please include the hardware you used for testing and a short synopsis of your testing procedure. Untested pull requests are less likely to be merged, as even slight changes create the risk of breaking the main branch.
-
-- If you have a fix don't open an issue telling about it, but test the code and submit a pull request. Use the __development__ branch when you submit, current its not the default one so please check that you submit to the __development__ branch
+The delta_auto_calibration-dev branch will include new code from David Crocker that implements a fast 7-factor least-squares fit algorithm, alongside Rich Cattell's autocalibration code.
 
 ==========================
 Marlin 3D Printer Firmware
